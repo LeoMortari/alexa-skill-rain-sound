@@ -1,0 +1,40 @@
+# Dependências
+node_modules/
+package-lock.json
+
+# Variáveis de ambiente e credenciais
+.env
+.env.local
+.env.*.local
+
+# Build e pacotes
+lambda.zip
+*.zip
+
+# Arquivos com identificadores da conta AWS (sensíveis)
+skill.json
+infra/s3-public-policy.json
+lambda/config.js
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# AWS
+.aws/
+*.pem
+*.key
+
+# Outros
+*.tmp
+*.temp

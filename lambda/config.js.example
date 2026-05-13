@@ -1,0 +1,5 @@
+module.exports = {
+  S3_BUCKET: process.env.S3_BUCKET || 'nome-do-seu-bucket',
+  S3_KEY: process.env.S3_KEY || 'chuva.mp3',
+  AUDIO_TOKEN: 'rain-loop-token'
+};

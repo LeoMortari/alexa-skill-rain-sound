@@ -1,0 +1,45 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "pt-BR": {
+          "summary": "Reproduz som de chuva em loop para relaxamento e sono.",
+          "examplePhrases": [
+            "Alexa, abrir chuva",
+            "Alexa, tocar chuva",
+            "Alexa, parar"
+          ],
+          "keywords": [
+            "chuva",
+            "som",
+            "relaxamento",
+            "dormir",
+            "meditação"
+          ],
+          "name": "Som de Chuva",
+          "description": "Skill simples que toca o som de chuva em loop por tempo indeterminado. Ideal para relaxar, dormir ou meditar. Diga \"Alexa, abrir chuva\" para começar.",
+          "smallIconUri": "",
+          "largeIconUri": ""
+        }
+      },
+      "isAvailableWorldwide": false,
+      "testingInstructions": "Testar em dispositivo Echo com suporte a AudioPlayer.",
+      "category": "HEALTH_AND_FITNESS",
+      "distributionCountries": ["BR"]
+    },
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "arn:aws:lambda:us-east-1:SEU_ACCOUNT_ID:function:skill-chuva"
+        },
+        "interfaces": [
+          {
+            "type": "AUDIO_PLAYER"
+          }
+        ]
+      }
+    },
+    "manifestVersion": "1.0",
+    "permissions": []
+  }
+}

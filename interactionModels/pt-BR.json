@@ -1,0 +1,45 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "chuva",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.PauseIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.ResumeIntent",
+          "samples": []
+        },
+        {
+          "name": "PlayIntent",
+          "slots": [],
+          "samples": [
+            "tocar chuva",
+            "tocar som de chuva",
+            "começar chuva",
+            "começar som de chuva",
+            "iniciar chuva",
+            "iniciar som de chuva",
+            "quero ouvir chuva",
+            "pôr chuva",
+            "colocar chuva"
+          ]
+        }
+      ],
+      "types": []
+    }
+  }
+}
