@@ -1,103 +1,124 @@
-const AUDIO_URL = process.env.AUDIO_URL || 'https://SEU-USUARIO.github.io/skill-som-chuva/chuva.mp3';
-const AUDIO_TOKEN = 'rain-loop-token';
+const AUDIO_URL =
+  process.env.AUDIO_URL ||
+  "https://SEU-USUARIO.github.io/skill-som-chuva/chuva.mp3";
 
-function buildPlayResponse(url, behavior = 'REPLACE_ALL') {
+function buildPlayResponse(
+  url,
+  behavior = "REPLACE_ALL",
+  expectedPreviousToken = null,
+) {
+  const stream = {
+    token: `rain-${Date.now()}`,
+    url: url,
+    offsetInMilliseconds: 0,
+  };
+
+  if (behavior === "ENQUEUE" && expectedPreviousToken) {
+    stream.expectedPreviousToken = expectedPreviousToken;
+  }
+
   return {
-    version: '1.0',
+    version: "1.0",
     response: {
-      directives: [{
-        type: 'AudioPlayer.Play',
-        playBehavior: behavior,
-        audioItem: {
-          stream: {
-            token: AUDIO_TOKEN,
-            url: url,
-            offsetInMilliseconds: 0
-          }
-        }
-      }],
-      shouldEndSession: true
-    }
+      directives: [
+        {
+          type: "AudioPlayer.Play",
+          playBehavior: behavior,
+          audioItem: { stream },
+        },
+      ],
+      shouldEndSession: true,
+    },
   };
 }
 
 function buildStopResponse() {
   return {
-    version: '1.0',
+    version: "1.0",
     response: {
       outputSpeech: {
-        type: 'PlainText',
-        text: 'Som de chuva encerrado. Até logo!'
+        type: "PlainText",
+        text: "Som de chuva encerrado. Até logo!",
       },
-      directives: [{
-        type: 'AudioPlayer.Stop'
-      }],
-      shouldEndSession: true
-    }
+      directives: [
+        {
+          type: "AudioPlayer.Stop",
+        },
+      ],
+      shouldEndSession: true,
+    },
   };
 }
 
 exports.handler = async (event) => {
   const requestType = event.request.type;
 
-  console.log('Request type:', requestType);
+  console.log("Request type:", requestType);
 
-  if (requestType === 'LaunchRequest') {
-    return buildPlayResponse(AUDIO_URL, 'REPLACE_ALL');
+  if (requestType === "LaunchRequest") {
+    return buildPlayResponse(AUDIO_URL, "REPLACE_ALL");
   }
 
-  if (requestType === 'IntentRequest') {
+  if (requestType === "IntentRequest") {
     const intentName = event.request.intent.name;
-    console.log('Intent:', intentName);
 
-    if (intentName === 'PlayIntent') {
-      return buildPlayResponse(AUDIO_URL, 'REPLACE_ALL');
+    console.log("Intent:", intentName);
+
+    if (intentName === "PlayIntent") {
+      return buildPlayResponse(AUDIO_URL, "REPLACE_ALL");
     }
 
-    if (intentName === 'AMAZON.PauseIntent') {
+    if (intentName === "AMAZON.PauseIntent") {
       return {
-        version: '1.0',
+        version: "1.0",
         response: {
-          directives: [{ type: 'AudioPlayer.Stop' }]
-        }
+          directives: [{ type: "AudioPlayer.Stop" }],
+        },
       };
     }
 
-    if (intentName === 'AMAZON.ResumeIntent') {
-      return buildPlayResponse(AUDIO_URL, 'REPLACE_ALL');
+    if (intentName === "AMAZON.ResumeIntent") {
+      return buildPlayResponse(AUDIO_URL, "REPLACE_ALL");
     }
 
-    if (intentName === 'AMAZON.StopIntent' || intentName === 'AMAZON.CancelIntent') {
+    if (
+      intentName === "AMAZON.StopIntent" ||
+      intentName === "AMAZON.CancelIntent"
+    ) {
       return buildStopResponse();
     }
 
-    if (intentName === 'AMAZON.HelpIntent') {
+    if (intentName === "AMAZON.HelpIntent") {
       return {
-        version: '1.0',
+        version: "1.0",
         response: {
           outputSpeech: {
-            type: 'PlainText',
-            text: 'Esta skill toca o som de chuva em loop. Diga "Alexa, abrir chuva" para começar, ou "Alexa, parar" para encerrar.'
+            type: "PlainText",
+            text: 'Esta skill toca o som de chuva em loop. Diga "Alexa, abrir os melhores sons de chuva" para começar, ou "Alexa, parar" para encerrar.',
           },
-          shouldEndSession: true
-        }
+          shouldEndSession: true,
+        },
       };
     }
   }
 
-  if (requestType === 'AudioPlayer.PlaybackNearlyFinished') {
-    return buildPlayResponse(AUDIO_URL, 'ENQUEUE');
+  if (requestType === "AudioPlayer.PlaybackNearlyFinished") {
+    const currentToken = event.request.token;
+
+    return buildPlayResponse(AUDIO_URL, "ENQUEUE", currentToken);
   }
 
-  if (requestType === 'AudioPlayer.PlaybackFailed') {
-    console.log('PlaybackFailed:', JSON.stringify(event.request.error));
-    return { version: '1.0', response: {} };
+  if (requestType === "AudioPlayer.PlaybackFailed") {
+    console.log("PlaybackFailed:", JSON.stringify(event.request.error));
+
+    return { version: "1.0", response: {} };
   }
 
-  if (requestType === 'SessionEndedRequest') {
-    console.log('Session ended. Reason:', event.request.reason);
-    return { version: '1.0', response: {} };
+  if (requestType === "SessionEndedRequest") {
+    console.log("Session ended. Reason:", event.request.reason);
+
+    return { version: "1.0", response: {} };
   }
 
-  return { version: '1.0', response: {} };
+  return { version: "1.0", response: {} };
 };
